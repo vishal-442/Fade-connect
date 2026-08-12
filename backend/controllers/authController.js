@@ -2,7 +2,11 @@ const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
 const register = async (req, res) => {
-  const { name, email, password, role, phone } = req.body;
+  const name = String(req.body.name || '').trim();
+  const email = String(req.body.email || '').trim().toLowerCase();
+  const password = String(req.body.password || '');
+  const role = req.body.role;
+  const phone = req.body.phone ? String(req.body.phone).trim() : undefined;
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -24,7 +28,8 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const email = String(req.body.email || '').trim().toLowerCase();
+  const password = String(req.body.password || '');
   const user = await User.findOne({ email });
 
   if (!user || !(await user.matchPassword(password))) {

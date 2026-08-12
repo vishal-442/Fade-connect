@@ -10,15 +10,20 @@ router.post(
   '/register',
   [
     body('name').trim().notEmpty(),
-    body('email').isEmail().normalizeEmail(),
-    body('password').isLength({ min: 6 }),
+    body('email').isString().isEmail().normalizeEmail(),
+    body('password').isString().isLength({ min: 6 }),
     body('role').optional().isIn(['user', 'owner'])
   ],
   validateRequest,
   register
 );
 
-router.post('/login', [body('email').isEmail(), body('password').notEmpty()], validateRequest, login);
+router.post(
+  '/login',
+  [body('email').isString().isEmail().normalizeEmail(), body('password').isString().notEmpty()],
+  validateRequest,
+  login
+);
 router.get('/me', protect, getProfile);
 router.put('/me', protect, [body('name').optional().trim().notEmpty()], validateRequest, updateProfile);
 

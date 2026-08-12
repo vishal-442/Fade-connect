@@ -1,13 +1,20 @@
 const Booking = require('../models/Booking');
 const Worker = require('../models/Worker');
 const Service = require('../models/Service');
+const { Types } = require('mongoose');
 
 const createBooking = async (req, res) => {
   const { salon, service, worker, appointmentTime, notes } = req.body;
+  if (![salon, service, worker].every((value) => Types.ObjectId.isValid(value))) {
+    return res.status(400).json({ message: 'Invalid booking reference id' });
+  }
+
+  const workerId = Types.ObjectId.createFromHexString(String(worker));
+  const serviceId = Types.ObjectId.createFromHexString(String(service));
 
   const [workerDoc, serviceDoc] = await Promise.all([
-    Worker.findById(worker),
-    Service.findById(service)
+    Worker.findById(workerId),
+    Service.findById(serviceId)
   ]);
 
   if (!workerDoc || !serviceDoc) {
@@ -70,6 +77,10 @@ const listOwnerBookings = async (req, res) => {
 };
 
 const updateBookingStatus = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid booking id' });
+  }
+
   const booking = await Booking.findById(req.params.id).populate('salon');
   if (!booking) {
     return res.status(404).json({ message: 'Booking not found' });

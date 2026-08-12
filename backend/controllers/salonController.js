@@ -1,6 +1,9 @@
 const Salon = require('../models/Salon');
 const Service = require('../models/Service');
 const Worker = require('../models/Worker');
+const { Types } = require('mongoose');
+
+const escapeRegExp = (value = '') => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const createSalon = async (req, res) => {
   const salon = await Salon.create({ ...req.body, owner: req.user._id });
@@ -12,11 +15,12 @@ const listSalons = async (req, res) => {
   const query = {};
 
   if (city) {
-    query['address.city'] = new RegExp(`^${city}$`, 'i');
+    query['address.city'] = new RegExp(`^${escapeRegExp(String(city))}$`, 'i');
   }
 
   if (q) {
-    query.$or = [{ name: new RegExp(q, 'i') }, { description: new RegExp(q, 'i') }];
+    const safeSearch = escapeRegExp(String(q));
+    query.$or = [{ name: new RegExp(safeSearch, 'i') }, { description: new RegExp(safeSearch, 'i') }];
   }
 
   const salons = await Salon.find(query).sort({ rating: -1, createdAt: -1 });
@@ -24,6 +28,10 @@ const listSalons = async (req, res) => {
 };
 
 const getSalonById = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid salon id' });
+  }
+
   const salon = await Salon.findById(req.params.id).populate('owner', 'name email phone');
   if (!salon) {
     return res.status(404).json({ message: 'Salon not found' });
@@ -38,6 +46,10 @@ const getSalonById = async (req, res) => {
 };
 
 const updateSalon = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid salon id' });
+  }
+
   const salon = await Salon.findById(req.params.id);
   if (!salon) {
     return res.status(404).json({ message: 'Salon not found' });
@@ -53,6 +65,10 @@ const updateSalon = async (req, res) => {
 };
 
 const deleteSalon = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid salon id' });
+  }
+
   const salon = await Salon.findById(req.params.id);
   if (!salon) {
     return res.status(404).json({ message: 'Salon not found' });

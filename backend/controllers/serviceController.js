@@ -1,7 +1,12 @@
 const Service = require('../models/Service');
 const Salon = require('../models/Salon');
+const { Types } = require('mongoose');
 
 const createService = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.body.salon)) {
+    return res.status(400).json({ message: 'Invalid salon id' });
+  }
+
   const salon = await Salon.findById(req.body.salon);
   if (!salon) {
     return res.status(404).json({ message: 'Salon not found' });
@@ -16,12 +21,23 @@ const createService = async (req, res) => {
 };
 
 const listServices = async (req, res) => {
-  const query = req.query.salon ? { salon: req.query.salon } : {};
+  let query = {};
+  if (req.query.salon) {
+    if (!Types.ObjectId.isValid(req.query.salon)) {
+      return res.status(400).json({ message: 'Invalid salon id' });
+    }
+    query = { salon: Types.ObjectId.createFromHexString(String(req.query.salon)) };
+  }
+
   const services = await Service.find(query).sort({ createdAt: -1 });
   return res.json(services);
 };
 
 const updateService = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid service id' });
+  }
+
   const service = await Service.findById(req.params.id).populate('salon');
   if (!service) {
     return res.status(404).json({ message: 'Service not found' });
@@ -37,6 +53,10 @@ const updateService = async (req, res) => {
 };
 
 const deleteService = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid service id' });
+  }
+
   const service = await Service.findById(req.params.id).populate('salon');
   if (!service) {
     return res.status(404).json({ message: 'Service not found' });

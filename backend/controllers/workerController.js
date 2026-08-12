@@ -1,7 +1,12 @@
 const Worker = require('../models/Worker');
 const Salon = require('../models/Salon');
+const { Types } = require('mongoose');
 
 const createWorker = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.body.salon)) {
+    return res.status(400).json({ message: 'Invalid salon id' });
+  }
+
   const salon = await Salon.findById(req.body.salon);
   if (!salon) {
     return res.status(404).json({ message: 'Salon not found' });
@@ -20,12 +25,23 @@ const createWorker = async (req, res) => {
 };
 
 const listWorkers = async (req, res) => {
-  const query = req.query.salon ? { salon: req.query.salon } : {};
+  let query = {};
+  if (req.query.salon) {
+    if (!Types.ObjectId.isValid(req.query.salon)) {
+      return res.status(400).json({ message: 'Invalid salon id' });
+    }
+    query = { salon: Types.ObjectId.createFromHexString(String(req.query.salon)) };
+  }
+
   const workers = await Worker.find(query).populate('services', 'name durationMinutes price');
   return res.json(workers);
 };
 
 const updateWorker = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid worker id' });
+  }
+
   const worker = await Worker.findById(req.params.id).populate('salon');
   if (!worker) {
     return res.status(404).json({ message: 'Worker not found' });
@@ -46,6 +62,10 @@ const updateWorker = async (req, res) => {
 };
 
 const deleteWorker = async (req, res) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid worker id' });
+  }
+
   const worker = await Worker.findById(req.params.id).populate('salon');
   if (!worker) {
     return res.status(404).json({ message: 'Worker not found' });
