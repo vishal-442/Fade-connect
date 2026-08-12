@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fade Connect | Premium Salon Booking</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <h1>Fade Connect</h1>
+        <p>Find top-rated salons, explore experts, and book instantly.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Authentication</h2>
+        <div class="grid two">
+          <form id="registerForm" class="form">
+            <h3>Register</h3>
+            <input name="name" placeholder="Full Name" required />
+            <input name="email" type="email" placeholder="Email" required />
+            <input name="password" type="password" placeholder="Password" required />
+            <select name="role">
+              <option value="user">User</option>
+              <option value="owner">Salon Owner</option>
+            </select>
+            <button type="submit">Create Account</button>
+          </form>
+
+          <form id="loginForm" class="form">
+            <h3>Login</h3>
+            <input name="email" type="email" placeholder="Email" required />
+            <input name="password" type="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+          </form>
+        </div>
+        <p id="authStatus" class="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>Discover Nearby Salons</h2>
+        <form id="searchForm" class="search-row">
+          <input name="city" placeholder="Filter by city" />
+          <input name="q" placeholder="Search by name or service vibe" />
+          <button type="submit">Search</button>
+        </form>
+        <div id="salonList" class="grid"></div>
+      </section>
+
+      <section class="card">
+        <h2>Book Appointment</h2>
+        <form id="bookingForm" class="form">
+          <input name="salon" placeholder="Salon ID" required />
+          <input name="service" placeholder="Service ID" required />
+          <input name="worker" placeholder="Worker ID" required />
+          <input name="appointmentTime" type="datetime-local" required />
+          <textarea name="notes" placeholder="Special instructions (optional)"></textarea>
+          <button type="submit">Book Slot</button>
+        </form>
+        <p id="bookingStatus" class="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>Dashboard</h2>
+        <div class="grid two">
+          <button id="myBookingsBtn">My Bookings</button>
+          <button id="ownerBookingsBtn">Owner Bookings</button>
+        </div>
+        <pre id="dashboardOutput"></pre>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
