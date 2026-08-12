@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: #0F172A;
+  }
+  ::selection {
+    background-color: rgba(212, 175, 55, 0.3);
+    color: #F8F7F4;
+  }
+  :focus-visible {
+    outline: 2px solid #D4AF37;
+    outline-offset: 2px;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Fraunces', serif;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0F172A;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E293B;
+    border-radius: 8px;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-charcoal/60 backdrop-blur-md border border-white/5 rounded-2xl shadow-glass;
+  }
+  .gold-border-hover {
+    @apply transition-all duration-300 hover:shadow-gold hover:border-gold/40;
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold text-ink font-semibold px-6 py-3 transition-all duration-300 hover:bg-gold-glow hover:shadow-gold active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 text-warmwhite font-medium px-6 py-3 transition-all duration-300 hover:border-gold/50 hover:text-gold disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .input-field {
+    @apply w-full bg-ink-light/60 border border-white/10 rounded-xl px-4 py-3 text-warmwhite placeholder:text-slate-soft/70 focus:border-gold/60 focus:outline-none transition-colors;
+  }
+  .fade-bar {
+    @apply bg-fade-bar bg-[length:200%_200%] animate-sweep;
+  }
+  .label-eyebrow {
+    @apply text-xs uppercase tracking-[0.2em] text-gold/80 font-semibold;
+  }
+}
