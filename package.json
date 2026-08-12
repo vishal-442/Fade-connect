@@ -1,0 +1,28 @@
+{
+  "name": "fade-connect",
+  "version": "1.0.0",
+  "description": "Fade Connect is a full-stack smart salon booking platform that helps users discover nearby salons, view services, ratings, and worker specializations, check available slots, and book appointments online. Built using HTML, CSS, JavaScript, Node.js, Express.js, and MongoDB, with Google Maps and AI-powered hairstyle recommendations.",
+  "main": "backend/server.js",
+  "scripts": {
+    "test": "echo \"No tests configured\"",
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://localhost:26831/vishal-442/Fade-connect"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.2"
+  }
+}
